@@ -40,12 +40,13 @@
             // 
             // btnStart
             // 
+            this.btnStart.BackColor = System.Drawing.Color.LightGreen;
             this.btnStart.Location = new System.Drawing.Point(260, 20);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(121, 40);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "START";
-            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtIP
@@ -54,6 +55,7 @@
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(100, 20);
             this.txtIP.TabIndex = 1;
+            this.txtIP.Text = "10.240.0.1";
             // 
             // lblIP
             // 
@@ -86,13 +88,14 @@
             // 
             // btnStop
             // 
+            this.btnStop.BackColor = System.Drawing.Color.LightGray;
             this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(387, 20);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(132, 40);
             this.btnStop.TabIndex = 5;
             this.btnStop.Text = "STOP";
-            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // lblConnection
@@ -108,13 +111,14 @@
             // 
             // btnSave
             // 
+            this.btnSave.BackColor = System.Drawing.Color.LightGray;
             this.btnSave.Enabled = false;
             this.btnSave.Location = new System.Drawing.Point(387, 419);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(132, 28);
             this.btnSave.TabIndex = 7;
             this.btnSave.Text = "Save Logs";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // frmMain

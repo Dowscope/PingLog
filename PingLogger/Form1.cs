@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -129,6 +130,8 @@ namespace PingLogger
                 ipcConsole.Add(e.Data + Environment.NewLine);
             }
         }
+
+        // UI Button Clicks
         private void button1_Click(object sender, EventArgs e)
         {
             // Check if IP Address has enough characters
@@ -157,24 +160,25 @@ namespace PingLogger
 
             // Disable the start btn to prevent it being pressed twice
             btnStart.Enabled = false;
+            btnStart.BackColor = Color.LightGray;
 
             // Enable the STOP button
             btnStop.Enabled = true;
+            btnStop.BackColor = Color.Tomato;
 
             // Disable the SAVE button if enabled
             btnSave.Enabled = false;
+            btnSave.BackColor = Color.LightGray;
 
             // Get start time
             startTime = DateTime.Now;
 
             // Start Pinging
             string logString = "Starting Ping..." + Environment.NewLine;
-            txtInfo.Text += logString;
+            txtInfo.Text = logString;
             pingConsole.Add(logString);
             RunPing();
-        }
-
-        // UI Button Clicks
+        }        
         private void btnStop_Click(object sender, EventArgs e)
         {
             // Get end tim and calculate total time running.
@@ -187,9 +191,12 @@ namespace PingLogger
 
             // Disable / Enable buttons 
             btnStop.Enabled = false;
+            btnStop.BackColor = Color.LightGray;
             btnStart.Enabled = true;
+            btnStart.BackColor = Color.LightGreen;
             lblConnection.Visible = false;
             btnSave.Enabled = true;
+            btnSave.BackColor = Color.LightGreen;
 
             // Stop the PING process from running.
             Process[] processes = Process.GetProcessesByName("ping");
