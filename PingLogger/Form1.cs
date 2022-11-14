@@ -11,6 +11,10 @@ namespace PingLogger
 {
     public partial class frmMain : Form
     {
+        frmIPC ipcWin = new frmIPC();
+
+        Action<string> cbIPCUpdated;
+
         DateTime startTime;
         DateTime endTime;
 
@@ -42,11 +46,38 @@ namespace PingLogger
         }
         private void getIPConfig(string pingLog, string lastPing)
         {
-            ipcConsole.Add("*****************************************" + Environment.NewLine);
-            ipcConsole.Add("*****************************************" + Environment.NewLine);
-            ipcConsole.Add("IPCONFIG Capture at " + DateTime.Now + Environment.NewLine);
-            ipcConsole.Add("Last Ping Line:  " + lastPing + Environment.NewLine);
-            ipcConsole.Add("Current Ping Line:  " + pingLog + Environment.NewLine);
+            string s1 = "*****************************************" + Environment.NewLine;
+            string s2 = "*****************************************" + Environment.NewLine;
+            string s3 = "IPCONFIG Capture at " + DateTime.Now + Environment.NewLine;
+            string s4 = "Last Ping Line:  " + lastPing + Environment.NewLine;
+            string s5 = "Current Ping Line:  " + pingLog + Environment.NewLine;
+
+            ipcConsole.Add(s1);
+            ipcConsole.Add(s2);
+            ipcConsole.Add(s3);
+            ipcConsole.Add(s4);
+            ipcConsole.Add(s5);
+
+            /*if (ipcWin.Visible == false)
+            {
+                if (ipcWin.IsDisposed)
+                {
+                    ipcWin = new frmIPC();
+
+                }
+                ipcWin.Show();
+            }*/
+
+            btnStop.Invoke(new Action(() =>
+            {
+                ipcWin.Show();
+            }));
+
+            ipcWin.OnTextUpdate(s1);
+            ipcWin.OnTextUpdate(s2);
+            ipcWin.OnTextUpdate(s3);
+            ipcWin.OnTextUpdate(s4);
+            ipcWin.OnTextUpdate(s5);
 
             Process p = new Process();
             p.StartInfo.FileName = "ipconfig";
@@ -65,7 +96,7 @@ namespace PingLogger
             p2.StartInfo.CreateNoWindow = true;
             p2.StartInfo.UseShellExecute = false;
             p2.StartInfo.RedirectStandardOutput = true;
-            p2.OutputDataReceived += new DataReceivedEventHandler(OnNetOutput);
+            p2.OutputDataReceived += new DataReceivedEventHandler(OnIPCOutput);
 
             p2.Start();
             p2.BeginOutputReadLine();
@@ -119,15 +150,14 @@ namespace PingLogger
             if (!string.IsNullOrEmpty(e.Data))
             {
                 // Add the line to the array for saving later.
-                ipcConsole.Add(e.Data + Environment.NewLine);
-            }
-        }
-        private void OnNetOutput(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                // Add the line to the array for saving later.
-                ipcConsole.Add(e.Data + Environment.NewLine);
+                string s = e.Data + Environment.NewLine;
+                ipcConsole.Add(s);
+
+                ipcWin.Invoke(new Action(() =>
+                {
+                    ipcWin.OnTextUpdate(s);
+                }));
+                
             }
         }
 
