@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * Ping Logger
+ * Version: 1.0.0
+ * Author: Timothy Dowling
+ * Created On: Nov 14, 2022
+ * Github: https://github.com/Dowscope/PingLog
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -12,8 +20,6 @@ namespace PingLogger
     public partial class frmMain : Form
     {
         frmIPC ipcWin = new frmIPC();
-
-        Action<string> cbIPCUpdated;
 
         DateTime startTime;
         DateTime endTime;
@@ -46,38 +52,27 @@ namespace PingLogger
         }
         private void getIPConfig(string pingLog, string lastPing)
         {
-            string s1 = "*****************************************" + Environment.NewLine;
-            string s2 = "*****************************************" + Environment.NewLine;
-            string s3 = "IPCONFIG Capture at " + DateTime.Now + Environment.NewLine;
-            string s4 = "Last Ping Line:  " + lastPing + Environment.NewLine;
-            string s5 = "Current Ping Line:  " + pingLog + Environment.NewLine;
-
-            ipcConsole.Add(s1);
-            ipcConsole.Add(s2);
-            ipcConsole.Add(s3);
-            ipcConsole.Add(s4);
-            ipcConsole.Add(s5);
-
-            /*if (ipcWin.Visible == false)
+            
+            if (ipcWin.Visible == false)
             {
                 if (ipcWin.IsDisposed)
                 {
                     ipcWin = new frmIPC();
 
                 }
-                ipcWin.Show();
-            }*/
+                btnStop.Invoke(new Action(() =>
+                {
+                    ipcWin.Show();
+                }));
+            }
 
-            btnStop.Invoke(new Action(() =>
+            if (pingLog.Contains("Initial"))
             {
-                ipcWin.Show();
-            }));
-
-            ipcWin.OnTextUpdate(s1);
-            ipcWin.OnTextUpdate(s2);
-            ipcWin.OnTextUpdate(s3);
-            ipcWin.OnTextUpdate(s4);
-            ipcWin.OnTextUpdate(s5);
+                btnStop.Invoke(new Action(() =>
+                {
+                    ipcWin.OnReset();
+                }));
+            }
 
             Process p = new Process();
             p.StartInfo.FileName = "ipconfig";
@@ -85,10 +80,9 @@ namespace PingLogger
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-            p.OutputDataReceived += new DataReceivedEventHandler(OnIPCOutput);
-
             p.Start();
-            p.BeginOutputReadLine();
+            OnIPCOutput(p.StandardOutput.ReadToEndAsync().Result, lastPing, pingLog);
+            p.WaitForExit();
 
             Process p2 = new Process();
             p2.StartInfo.FileName = "netsh";
@@ -96,10 +90,9 @@ namespace PingLogger
             p2.StartInfo.CreateNoWindow = true;
             p2.StartInfo.UseShellExecute = false;
             p2.StartInfo.RedirectStandardOutput = true;
-            p2.OutputDataReceived += new DataReceivedEventHandler(OnIPCOutput);
-
             p2.Start();
-            p2.BeginOutputReadLine();
+            OnNetOutput(p2.StandardOutput.ReadToEndAsync().Result);
+            p2.WaitForExit();
         }
 
         // Callbacks
@@ -145,19 +138,59 @@ namespace PingLogger
                 }));
             }
         }
-        private void OnIPCOutput(object sender, DataReceivedEventArgs e)
+        private void OnIPCOutput(string data, string lastPing, string pingLog)
         {
-            if (!string.IsNullOrEmpty(e.Data))
+            if (!string.IsNullOrEmpty(data))
             {
+                string s1 = "*****************************************" + Environment.NewLine;
+                string s2 = "*****************************************" + Environment.NewLine;
+                string s3 = "IPCONFIG Capture at " + DateTime.Now + Environment.NewLine;
+                string s4 = "Last Ping Line:  " + lastPing + Environment.NewLine;
+                string s5 = "Current Ping Line:  " + pingLog + Environment.NewLine;
+
+                ipcConsole.Add(s1);
+                ipcConsole.Add(s2);
+                ipcConsole.Add(s3);
+                ipcConsole.Add(s4);
+                ipcConsole.Add(s5);
+
                 // Add the line to the array for saving later.
-                string s = e.Data + Environment.NewLine;
+                string s = data + Environment.NewLine;
                 ipcConsole.Add(s);
 
                 ipcWin.Invoke(new Action(() =>
                 {
+                    ipcWin.OnTextUpdate(s1);
+                    ipcWin.OnTextUpdate(s2);
+                    ipcWin.OnTextUpdate(s3);
+                    ipcWin.OnTextUpdate(s4);
+                    ipcWin.OnTextUpdate(s5);
                     ipcWin.OnTextUpdate(s);
                 }));
                 
+            }
+        }
+        private void OnNetOutput(string e)
+        {
+            if (!string.IsNullOrEmpty(e))
+            {
+                string s1 = "*****************************************" + Environment.NewLine;
+                string s2 = "NETSH Capture at " + DateTime.Now + Environment.NewLine;
+
+                ipcConsole.Add(s1);
+                ipcConsole.Add(s2);
+
+                // Add the line to the array for saving later.
+                string s = e + Environment.NewLine;
+                ipcConsole.Add(s);
+
+                ipcWin.Invoke(new Action(() =>
+                {
+                    ipcWin.OnTextUpdate(s1);
+                    ipcWin.OnTextUpdate(s2);
+                    ipcWin.OnTextUpdate(s);
+                }));
+
             }
         }
 

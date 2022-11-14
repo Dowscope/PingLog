@@ -25,5 +25,13 @@ namespace PingLogger
             }));
             
         }
+
+        public void OnReset()
+        {
+            btnClear.Invoke(new Action(() =>
+            {
+                txtIPCInfo.Text = "";
+            }));
+        }
     }
 }
