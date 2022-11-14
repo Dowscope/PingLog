@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
@@ -272,12 +273,28 @@ namespace PingLogger
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            txtInfo.Text += "Saving log files to the DESKTOP... ";
+            txtInfo.Text += "Saving log files to the DESKTOP in PINGLOGS folder... ";
 
             string desktopDIR = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            // Create the folder if it doesn't exist
+            string saveFolder = "PingLogs";
+            string saveFolderPath = System.IO.Path.Combine(desktopDIR, saveFolder);
+            if (!System.IO.Directory.Exists(saveFolderPath))
+            {
+                try
+                {
+                    System.IO.Directory.CreateDirectory(saveFolderPath);
+                }
+                catch (IOException ioe)
+                {
+                    MessageBox.Show("IO Error: " + ioe.Message);
+                }
+            }
+
             string currentTime = DateTime.Now.ToString("yyyyMMdd'T'HHmmss");
-            string pingFilename = desktopDIR + "\\PingLog-" + currentTime + ".txt";
-            string ipcFilename = desktopDIR + "\\IPCLog-" + currentTime + ".txt";
+            string pingFilename = saveFolderPath + "\\PingLog-" + currentTime + ".txt";
+            string ipcFilename = saveFolderPath + "\\IPCLog-" + currentTime + ".txt";
 
             // Write the IPCONFIG log file.
             using (TextWriter tw = new StreamWriter(ipcFilename))
@@ -296,7 +313,16 @@ namespace PingLogger
                     tw.WriteLine(s);
                 }
             }
+            txtInfo.Text += "SUCCESSFUL" + Environment.NewLine;
 
+            // Zip the folder 
+            txtInfo.Text += "Zipping Files to PINGLOGS.ZIP... ";
+            ZipFile.CreateFromDirectory(saveFolderPath, desktopDIR + "\\PingLogs-" + currentTime + ".zip");
+            txtInfo.Text += "SUCCESSFUL" + Environment.NewLine;
+
+            // Remove the old logs
+            txtInfo.Text += "Cleaning up old log files... ";
+            Directory.Delete(saveFolderPath, true);
             txtInfo.Text += "SUCCESSFUL" + Environment.NewLine;
         }
     }
