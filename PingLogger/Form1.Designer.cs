@@ -184,7 +184,7 @@
             this.Controls.Add(this.txtIP);
             this.Controls.Add(this.btnStart);
             this.Name = "frmMain";
-            this.Text = "Ping Logger v1.0.0";
+            this.Text = "Ping Logger v1.1.0";
             this.ResumeLayout(false);
             this.PerformLayout();
 
