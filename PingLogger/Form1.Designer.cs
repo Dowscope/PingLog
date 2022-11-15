@@ -36,6 +36,10 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.lblConnection = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
+            this.txtIPCInfo = new System.Windows.Forms.TextBox();
+            this.lblPingDisplay = new System.Windows.Forms.Label();
+            this.lblIPCDisplay = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnStart
@@ -79,7 +83,7 @@
             // 
             // txtInfo
             // 
-            this.txtInfo.Location = new System.Drawing.Point(15, 119);
+            this.txtInfo.Location = new System.Drawing.Point(15, 105);
             this.txtInfo.Multiline = true;
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -102,7 +106,7 @@
             // 
             this.lblConnection.AutoSize = true;
             this.lblConnection.ForeColor = System.Drawing.Color.Red;
-            this.lblConnection.Location = new System.Drawing.Point(15, 419);
+            this.lblConnection.Location = new System.Drawing.Point(15, 405);
             this.lblConnection.Name = "lblConnection";
             this.lblConnection.Size = new System.Drawing.Size(247, 13);
             this.lblConnection.TabIndex = 6;
@@ -113,7 +117,7 @@
             // 
             this.btnSave.BackColor = System.Drawing.Color.LightGray;
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(387, 419);
+            this.btnSave.Location = new System.Drawing.Point(759, 405);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(132, 28);
             this.btnSave.TabIndex = 7;
@@ -121,11 +125,56 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // txtIPCInfo
+            // 
+            this.txtIPCInfo.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIPCInfo.Location = new System.Drawing.Point(525, 105);
+            this.txtIPCInfo.Multiline = true;
+            this.txtIPCInfo.Name = "txtIPCInfo";
+            this.txtIPCInfo.ReadOnly = true;
+            this.txtIPCInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtIPCInfo.Size = new System.Drawing.Size(504, 293);
+            this.txtIPCInfo.TabIndex = 8;
+            // 
+            // lblPingDisplay
+            // 
+            this.lblPingDisplay.AutoSize = true;
+            this.lblPingDisplay.Location = new System.Drawing.Point(18, 86);
+            this.lblPingDisplay.Name = "lblPingDisplay";
+            this.lblPingDisplay.Size = new System.Drawing.Size(65, 13);
+            this.lblPingDisplay.TabIndex = 9;
+            this.lblPingDisplay.Text = "Ping Display";
+            // 
+            // lblIPCDisplay
+            // 
+            this.lblIPCDisplay.AutoSize = true;
+            this.lblIPCDisplay.Location = new System.Drawing.Point(522, 86);
+            this.lblIPCDisplay.Name = "lblIPCDisplay";
+            this.lblIPCDisplay.Size = new System.Drawing.Size(84, 13);
+            this.lblIPCDisplay.TabIndex = 10;
+            this.lblIPCDisplay.Text = "IPConfig Display";
+            // 
+            // btnClear
+            // 
+            this.btnClear.BackColor = System.Drawing.Color.LightGray;
+            this.btnClear.Enabled = false;
+            this.btnClear.Location = new System.Drawing.Point(897, 405);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(132, 28);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "Clear Displays";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(531, 459);
+            this.ClientSize = new System.Drawing.Size(1043, 441);
+            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.lblIPCDisplay);
+            this.Controls.Add(this.lblPingDisplay);
+            this.Controls.Add(this.txtIPCInfo);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblConnection);
             this.Controls.Add(this.btnStop);
@@ -151,6 +200,10 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblConnection;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.TextBox txtIPCInfo;
+        private System.Windows.Forms.Label lblPingDisplay;
+        private System.Windows.Forms.Label lblIPCDisplay;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 

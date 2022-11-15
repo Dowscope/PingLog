@@ -1,8 +1,9 @@
 ﻿/*
  * Ping Logger
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Timothy Dowling
  * Created On: Nov 14, 2022
+ * Modified On: Nov 15, 2022
  * Github: https://github.com/Dowscope/PingLog
  */
 
@@ -20,8 +21,6 @@ namespace PingLogger
 {
     public partial class frmMain : Form
     {
-        frmIPC ipcWin = new frmIPC();
-
         DateTime startTime;
         DateTime endTime;
 
@@ -53,25 +52,11 @@ namespace PingLogger
         }
         private void getIPConfig(string pingLog, string lastPing)
         {
-            
-            if (ipcWin.Visible == false)
-            {
-                if (ipcWin.IsDisposed)
-                {
-                    ipcWin = new frmIPC();
-
-                }
-                btnStop.Invoke(new Action(() =>
-                {
-                    ipcWin.Show();
-                }));
-            }
-
             if (pingLog.Contains("Initial"))
             {
                 btnStop.Invoke(new Action(() =>
                 {
-                    ipcWin.OnReset();
+                    txtIPCInfo.Text = "";
                 }));
             }
 
@@ -159,14 +144,14 @@ namespace PingLogger
                 string s = data + Environment.NewLine;
                 ipcConsole.Add(s);
 
-                ipcWin.Invoke(new Action(() =>
+                btnStart.Invoke(new Action(() =>
                 {
-                    ipcWin.OnTextUpdate(s1);
-                    ipcWin.OnTextUpdate(s2);
-                    ipcWin.OnTextUpdate(s3);
-                    ipcWin.OnTextUpdate(s4);
-                    ipcWin.OnTextUpdate(s5);
-                    ipcWin.OnTextUpdate(s);
+                    txtIPCInfo.Text += s1;
+                    txtIPCInfo.Text += s2;
+                    txtIPCInfo.Text += s3;
+                    txtIPCInfo.Text += s4;
+                    txtIPCInfo.Text += s5;
+                    txtIPCInfo.Text += s;
                 }));
                 
             }
@@ -185,11 +170,11 @@ namespace PingLogger
                 string s = e + Environment.NewLine;
                 ipcConsole.Add(s);
 
-                ipcWin.Invoke(new Action(() =>
+                btnStart.Invoke(new Action(() =>
                 {
-                    ipcWin.OnTextUpdate(s1);
-                    ipcWin.OnTextUpdate(s2);
-                    ipcWin.OnTextUpdate(s);
+                    txtIPCInfo.Text += s1;
+                    txtIPCInfo.Text += s2;
+                    txtIPCInfo.Text += s;
                 }));
 
             }
@@ -234,6 +219,10 @@ namespace PingLogger
             btnSave.Enabled = false;
             btnSave.BackColor = Color.LightGray;
 
+            // Disable the SAVE button if enabled
+            btnClear.Enabled = false;
+            btnClear.BackColor = Color.LightGray;
+
             // Get start time
             startTime = DateTime.Now;
 
@@ -261,6 +250,11 @@ namespace PingLogger
             lblConnection.Visible = false;
             btnSave.Enabled = true;
             btnSave.BackColor = Color.LightGreen;
+            btnClear.Enabled = true;
+            btnClear.BackColor = Color.LightGoldenrodYellow;
+
+            // Bug Fix?
+            txtIPCInfo.Select(0, 0);
 
             // Stop the PING process from running.
             Process[] processes = Process.GetProcessesByName("ping");
@@ -324,6 +318,12 @@ namespace PingLogger
             txtInfo.Text += "Cleaning up old log files... ";
             Directory.Delete(saveFolderPath, true);
             txtInfo.Text += "SUCCESSFUL" + Environment.NewLine;
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtInfo.Text = "";
+            txtIPCInfo.Text = "";
         }
     }
 }
